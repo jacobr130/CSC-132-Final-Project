@@ -1,2 +1,2 @@
 # Final Project: Games
-This is where our 3 games will be held
+This is where our games will be held.
