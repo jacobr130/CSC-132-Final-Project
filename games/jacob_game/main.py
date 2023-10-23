@@ -10,17 +10,19 @@ class Player(pygame.sprite.Sprite):
         
         # PLAYER SETTINGS
         # TODO: change
-        self.side_length = 100   # l and w of rect (square)
+        self.side_length = 150   # l and w of rect (square)
         self.dimensions = (self.side_length, self.side_length)
         self.x = WIDTH // 2
         self.y = 500
-        self.movement_speed = 5
+        self.movement_speed = 10
         self.gravity = 0
         
-        self.surf = pygame.image.load("games/jacob_game/images/player.png")
+        self.surf = pygame.image.load("games/jacob_game/images/player.png").convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         
-        self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 600))
+        self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 600),
+                                              bottomright=((WIDTH//2) + self.side_length, 600),
+                                              bottomleft=((WIDTH//2) - self.side_length, 600))
         
         '''print sprite size (debug)'''
         #print(self.surf.get_size())
@@ -90,8 +92,19 @@ def main():
         player.player_rect.y += player.gravity
         
         # keep player on ground
+        # midbottom = (x, y)
         if player.player_rect.midbottom[1] > 600:
-            player.player_rect.midbottom[1] == 600
+            player.player_rect.y = 600
+        
+        # if player goes off right of screen
+        if player.player_rect.bottomright[0] == WIDTH + player.side_length:
+            print("Endofscreen reached")
+            player.player_rect.x = 0 - player.side_length
+        
+        ## TODO: FIX THIS!!!!!!
+        # if player goes off left of screen
+        #if player.player_rect.bottomleft[0] == 0 - player.side_length:
+            #player.player_rect.x = WIDTH + player.side_length - 1 
         
         # update screen
         screen.blit(bg, (0, 0))
