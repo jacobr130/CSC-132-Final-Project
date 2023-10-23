@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
         elif pressed[K_RIGHT]:
             self.player_rect.x += self.movement_speed
         
-        #elif pressed[K_SPACE]:
+        #elif pressed[K_SPACE]: # Game is in auto jump mode
             #self.gravity = -20  # physics?
             #space_down = True
 
