@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         super(Player, self).__init__()
         
         # PLAYER SETTINGS
-        # TODO: change
+        # TODO: nothing
         self.side_length = 150   # l and w of rect (square)
         self.dimensions = (self.side_length, self.side_length)
         self.x = WIDTH // 2
@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.image.load("games/jacob_game/images/player.png").convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         
-        self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 600),
+        self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 600), # is there any end in sight
                                               bottomright=((WIDTH//2) + self.side_length, 600),
                                               bottomleft=((WIDTH//2) - self.side_length, 600))
         
@@ -36,13 +36,20 @@ class Player(pygame.sprite.Sprite):
     def update(self, pressed):
         if pressed[K_LEFT]:
             self.player_rect.x -= self.movement_speed
+            # if player goes off left of screen spawn at right
+            if self.player_rect.bottomleft[0] == 0 - self.side_length:
+                self.player_rect.x = WIDTH + self.side_length
         
         elif pressed[K_RIGHT]:
             self.player_rect.x += self.movement_speed
-        
-        #elif pressed[K_SPACE]: # Game is in auto jump mode
-            #self.gravity = -20  # physics?
-            #space_down = True
+            # if player goes off right of screen spawn at left
+            if self.player_rect.bottomright[0] == WIDTH + self.side_length:
+                self.player_rect.x = 0 - self.side_length
+        """
+        # elif pressed[K_SPACE]:
+            # self.gravity = -20  # physics?
+            # space_down = True
+        """
 
 # Platforms you gotta jump on
 class Platform(pygame.sprite.Sprite):
@@ -83,28 +90,19 @@ def main():
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
         
-        #player is constantly jumping
+        # player is constantly jumping
+        # this is going to create problems later 
         if player.player_rect.midbottom[1] == 600:
             player.gravity = -20
-            
-        # gravity does be existing tho
-        player.gravity += 1
-        player.player_rect.y += player.gravity
-        
-        # keep player on ground
-        # midbottom = (x, y)
+                                                    # < These 2 snippets will be         
+        # keep player on ground                     # < completely pointless in a
+        # midbottom = (x, y)                        # < few days
         if player.player_rect.midbottom[1] > 600:
             player.player_rect.y = 600
-        
-        # if player goes off right of screen
-        if player.player_rect.bottomright[0] == WIDTH + player.side_length:
-            print("Endofscreen reached")
-            player.player_rect.x = 0 - player.side_length
-        
-        ## TODO: FIX THIS!!!!!!
-        # if player goes off left of screen
-        #if player.player_rect.bottomleft[0] == 0 - player.side_length:
-            #player.player_rect.x = WIDTH + player.side_length - 1 
+            
+        # gravity does be existing
+        player.gravity += 1
+        player.player_rect.y += player.gravity
         
         # update screen
         screen.blit(bg, (0, 0))
