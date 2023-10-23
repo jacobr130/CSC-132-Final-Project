@@ -8,6 +8,8 @@ Implement platforms:
 
 Implement constant upward screen scrolling
 
+UPDATE GFX
+
 GFX Needed:
     - Player character
     - Background
