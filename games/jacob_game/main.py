@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.dimensions = (self.side_length, self.side_length)
         self.movement_speed = 10
         self.gravity = 0
+        self.jump_height = -25  # gravity
         
         self.surf = pygame.image.load("games/jacob_game/gfx/player.png").convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
@@ -21,9 +22,6 @@ class Player(pygame.sprite.Sprite):
         self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 800), # is there any end in sight
                                               bottomright=((WIDTH//2) + self.side_length, 800),
                                               bottomleft=((WIDTH//2) - self.side_length, 800))
-        
-        '''print sprite size (debug)'''
-        #print(self.surf.get_size())
         
     # Handle user input
     """
@@ -49,9 +47,6 @@ class Player(pygame.sprite.Sprite):
             # self.gravity = -20  # physics?
             # space_down = True
         """
-    
-    def check_collisions(object: pygame.Rect):
-        pass
 
 # Platforms you gotta jump on
 class Platform(pygame.sprite.Sprite):
@@ -59,8 +54,8 @@ class Platform(pygame.sprite.Sprite):
         super(Platform, self).__init__()
         
         # PLATFORM SETTINGS
-        self.length = 200
-        self.height = 75
+        self.length = 150
+        self.height = 50
         self.dimensions = (self.length, self.height)
         
         self.surf = self.pick_sprite()
@@ -80,8 +75,8 @@ class Platform(pygame.sprite.Sprite):
                 return pygame.image.load("games/jacob_game/gfx/platform_short.png").convert_alpha()
     
     def spawn(self):
-        #return self.surf.get_rect(center=(randint(0, WIDTH), randint(0, WIDTH)))
-        return self.surf.get_rect(topleft=(500,700))
+        return self.surf.get_rect(topleft=(randint(0, WIDTH-self.length), randint(0, 800-self.height)))
+        #return self.surf.get_rect(topleft=(500,700))   # debug version
     
     # I couldn't call it break() so
     # I went with the next best option
@@ -108,9 +103,9 @@ def main():
     collidables.append(ground_rect)
     
     # platforms
-    #platforms = []
-    platform = Platform()
-    collidables.append(platform.platform_rect)
+    platforms = []
+    #platform = Platform()
+    #collidables.append(platform.platform_rect)
     
     # handle fps
     clock = pygame.time.Clock()
@@ -122,6 +117,24 @@ def main():
             if event.type == QUIT:
                 RUNNING = False
 
+        # there's no way this is the best solution
+        #player_x_1 = player.player_rect.x
+        #player_x_2 = player.player_rect.x
+        #jumping = True if player_x_2 > player_x_1 else False
+        jumping = False
+
+        # create platforms
+        if len(platforms) < 10:
+            platforms.append(Platform())
+        
+        # this may cause a bug later
+        for platform in platforms:
+            collidables.append(platform.platform_rect)
+        
+        #for i in platforms:
+            #print(f"num: {len(platforms)}")    # debug
+            #print(i.platform_rect)
+
         # handle user input
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
@@ -129,19 +142,23 @@ def main():
         # player is constantly jumping
         # check for collisions between 
         # player and all other objects
+        ## TODO: fix platform jumping bug with player states
         for rect in collidables:
-            if player.player_rect.colliderect(rect):
-                player.gravity = -20
+            if player.player_rect.colliderect(rect) and not jumping:
+                player.gravity = player.jump_height
             
         # gravity does be existing
         player.gravity += 1
         player.player_rect.y += player.gravity
+        jumping = False
         
         # update screen
         screen.blit(bg, (0, 0))
         screen.blit(ground, ground_rect)
         screen.blit(player.surf, player.player_rect)
-        screen.blit(platform.surf, platform.platform_rect) 
+        for platform in platforms:
+            screen.blit(platform.surf, platform.platform_rect)
+        #screen.blit(platform.surf, platform.platform_rect)     # debug
         
         pygame.display.flip()
         
