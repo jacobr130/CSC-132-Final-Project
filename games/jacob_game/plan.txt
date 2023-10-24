@@ -1,6 +1,6 @@
 By Wednesday, 10/25/2023
 
-Implement platforms:
+Implement platforms:  -- I chose the wrong major
     - Spawn platforms randomly (random amount per row,
       random horizontal and vertical padding between, 
       randomize platform length)
@@ -8,11 +8,11 @@ Implement platforms:
 
 Implement constant upward screen scrolling
 
-UPDATE GFX
+UPDATE GFX  -- Pretty much done
 
 GFX Needed:
-    - Player character
-    - Background
-    - Floor? (only shows up at beginning)
-    - Platforms with various lengths
+    - Player character  -- Done
+    - Background  -- Done
+    - Floor? (only shows up at beginning) -- Done? (looks like ass)
+    - Platforms with various lengths               
     - Powerups possibly
