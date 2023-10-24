@@ -49,6 +49,9 @@ class Player(pygame.sprite.Sprite):
             # self.gravity = -20  # physics?
             # space_down = True
         """
+    
+    def check_collisions(object: pygame.Rect):
+        pass
 
 # Platforms you gotta jump on
 class Platform(pygame.sprite.Sprite):
@@ -63,8 +66,6 @@ class Platform(pygame.sprite.Sprite):
         self.surf = self.pick_sprite()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         self.platform_rect = self.spawn()
-        
-        print(self.platform_rect)
     
     def pick_sprite(self):
         """
@@ -72,14 +73,15 @@ class Platform(pygame.sprite.Sprite):
             There will be different sizes but this
             is a proof of concept
         """
-        size = 1    # will be randint later
+        size = 1    # will be randint later?
         
         match size:
             case 1:
-                return pygame.image.load("games\jacob_game\gfx\platform_short.png").convert_alpha()
+                return pygame.image.load("games/jacob_game/gfx/platform_short.png").convert_alpha()
     
     def spawn(self):
-        return self.surf.get_rect(center=(randint(0, WIDTH), randint(0, WIDTH)))
+        #return self.surf.get_rect(center=(randint(0, WIDTH), randint(0, WIDTH)))
+        return self.surf.get_rect(topleft=(500,700))
     
     # I couldn't call it break() so
     # I went with the next best option
@@ -87,10 +89,11 @@ class Platform(pygame.sprite.Sprite):
         pass
             
 def main():
+
+    collidables = []
     
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    screen.fill((255, 255, 255))
     
     player = Player()
     
@@ -101,55 +104,44 @@ def main():
     # ground that the game starts on
     ground = pygame.image.load("games/jacob_game/gfx/ground.png").convert()
     ground = pygame.transform.scale(ground, (WIDTH, 800))   # wide as screen and long af
-    
-    # TODO: clean code up
-    ground_rect = ground.get_rect()
+    ground_rect = ground.get_rect(topleft=(0, 800))
+    collidables.append(ground_rect)
     
     # platforms
     #platforms = []
     platform = Platform()
+    collidables.append(platform.platform_rect)
     
     # handle fps
     clock = pygame.time.Clock()
-    
+
     # Main game loop
     RUNNING = True
     while RUNNING:
         for event in pygame.event.get():
             if event.type == QUIT:
                 RUNNING = False
-        
+
         # handle user input
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
         
         # player is constantly jumping
-        # this is going to create problems later 
-        if player.player_rect.midbottom[1] == 800:
-            player.gravity = -20
-                                                    # < These 2 snippets will be         
-        # keep player on ground                     # < completely pointless in a
-        # midbottom = (x, y)                        # < few days
-        if player.player_rect.midbottom[1] > 800:
-            player.player_rect.y = 800
+        # check for collisions between 
+        # player and all other objects
+        for rect in collidables:
+            if player.player_rect.colliderect(rect):
+                player.gravity = -20
             
         # gravity does be existing
         player.gravity += 1
         player.player_rect.y += player.gravity
         
-        ## TODO: FIX COLLISIONS!!!!!!!
-        # collision w/ platform
-        # this will be a bitch to change when
-        # randomness is added
-        if player.player_rect.colliderect(platform.platform_rect):
-            print("WORKING")
-        
         # update screen
         screen.blit(bg, (0, 0))
-        screen.blit(ground, (0, 800))
+        screen.blit(ground, ground_rect)
         screen.blit(player.surf, player.player_rect)
-        #screen.blit(platform.surf, platform.platform_rect) # final version
-        screen.blit(platform.surf, (500, 700))  # test version
+        screen.blit(platform.surf, platform.platform_rect) 
         
         pygame.display.flip()
         
