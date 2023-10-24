@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 0
         self.jump_height = -25  # gravity offset
         
-        self.surf = pygame.image.load("games/jacob_game/gfx/player.png").convert_alpha()
+        self.surf = pygame.image.load(texture_player_r).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         
         self.rect = self.surf.get_rect(midbottom=(WIDTH//2, 800),
@@ -26,16 +26,22 @@ class Player(pygame.sprite.Sprite):
     """
         For now, this function takes keyboard input.
         This will be changed when controller is implemented.
-        Do I have any idea how that will work? notyet
+        Do I have any idea how that will work?
     """
     def update(self, pressed):
         if pressed[K_LEFT]:
+            self.surf = pygame.image.load(texture_player_l).convert_alpha()
+            self.surf = pygame.transform.scale(self.surf, self.dimensions)
+            
             self.rect.x -= self.movement_speed
             # if player goes off left of screen spawn at right
             if self.rect.bottomleft[0] == 0 - self.side_length:     
                 self.rect.x = WIDTH + self.side_length
         
         elif pressed[K_RIGHT]:
+            self.surf = pygame.image.load(texture_player_r).convert_alpha()
+            self.surf = pygame.transform.scale(self.surf, self.dimensions)
+            
             self.rect.x += self.movement_speed
             # if player goes off right of screen spawn at left
             if self.rect.bottomright[0] == WIDTH + self.side_length:
@@ -71,7 +77,7 @@ class Platform(pygame.sprite.Sprite):
         
         match size:
             case 1:
-                return pygame.image.load("games/jacob_game/gfx/platform_short.png").convert_alpha()
+                return pygame.image.load(texture_platform_short).convert_alpha()
     
     def spawn(self):
         return self.surf.get_rect(topleft=(randint(0, WIDTH-self.length), randint(0, 800-self.height)))
@@ -90,11 +96,11 @@ def main():
     player = Player()
     
     # sky
-    bg = pygame.image.load("games/jacob_game/gfx/sky.png").convert()
+    bg = pygame.image.load(texture_bg).convert()
     bg = pygame.transform.scale(bg, (WIDTH, HEIGHT))
     
     # ground that the game starts on
-    ground = pygame.image.load("games/jacob_game/gfx/ground.png").convert()
+    ground = pygame.image.load(texture_floor).convert()
     ground = pygame.transform.scale(ground, (WIDTH + (player.side_length*2), 800))
     ground_rect = ground.get_rect(topleft=(0, 800))
     collidables.append(ground_rect)
