@@ -2,8 +2,6 @@ import pygame
 from random import randint
 from settings import *
 
-# TODO: Make platform class, update graphics, literally finish the game by wednesday, etc.
-
 # The player character 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -14,14 +12,15 @@ class Player(pygame.sprite.Sprite):
         self.dimensions = (self.side_length, self.side_length)
         self.movement_speed = 10
         self.gravity = 0
-        self.jump_height = -25  # gravity
+        self.jump_height = -25  # gravity offset
         
         self.surf = pygame.image.load("games/jacob_game/gfx/player.png").convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         
-        self.player_rect = self.surf.get_rect(midbottom=(WIDTH//2, 800), # is there any end in sight
+        self.rect = self.surf.get_rect(midbottom=(WIDTH//2, 800),
                                               bottomright=((WIDTH//2) + self.side_length, 800),
                                               bottomleft=((WIDTH//2) - self.side_length, 800))
+        self.hitbox = self.rect.inflate(-35, 0)
         
     # Handle user input
     """
@@ -31,16 +30,16 @@ class Player(pygame.sprite.Sprite):
     """
     def update(self, pressed):
         if pressed[K_LEFT]:
-            self.player_rect.x -= self.movement_speed
+            self.rect.x -= self.movement_speed
             # if player goes off left of screen spawn at right
-            if self.player_rect.bottomleft[0] == 0 - self.side_length:
-                self.player_rect.x = WIDTH + self.side_length
+            if self.rect.bottomleft[0] == 0 - self.side_length:     
+                self.rect.x = WIDTH + self.side_length
         
         elif pressed[K_RIGHT]:
-            self.player_rect.x += self.movement_speed
+            self.rect.x += self.movement_speed
             # if player goes off right of screen spawn at left
-            if self.player_rect.bottomright[0] == WIDTH + self.side_length:
-                self.player_rect.x = 0 - self.side_length
+            if self.rect.bottomright[0] == WIDTH + self.side_length:
+                self.rect.x = 0 - self.side_length
                 
         """
         # elif pressed[K_SPACE]:
@@ -60,7 +59,7 @@ class Platform(pygame.sprite.Sprite):
         
         self.surf = self.pick_sprite()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
-        self.platform_rect = self.spawn()
+        self.rect = self.spawn()
     
     def pick_sprite(self):
         """
@@ -76,11 +75,9 @@ class Platform(pygame.sprite.Sprite):
     
     def spawn(self):
         return self.surf.get_rect(topleft=(randint(0, WIDTH-self.length), randint(0, 800-self.height)))
-        #return self.surf.get_rect(topleft=(500,700))   # debug version
+        #return self.surf.get_rect(topleft=(500,700))   # debug 
     
-    # I couldn't call it break() so
-    # I went with the next best option
-    def eviscerate(self):
+    def eviscerate(self):   # i couldn't name it break()
         pass
             
 def main():
@@ -98,14 +95,14 @@ def main():
     
     # ground that the game starts on
     ground = pygame.image.load("games/jacob_game/gfx/ground.png").convert()
-    ground = pygame.transform.scale(ground, (WIDTH, 800))   # wide as screen and long af
+    ground = pygame.transform.scale(ground, (WIDTH + (player.side_length*2), 800))
     ground_rect = ground.get_rect(topleft=(0, 800))
     collidables.append(ground_rect)
     
     # platforms
     platforms = []
-    #platform = Platform()
-    #collidables.append(platform.platform_rect)
+    platform = Platform()
+    #collidables.append(platform.rect)
     
     # handle fps
     clock = pygame.time.Clock()
@@ -117,48 +114,41 @@ def main():
             if event.type == QUIT:
                 RUNNING = False
 
-        # there's no way this is the best solution
-        #player_x_1 = player.player_rect.x
-        #player_x_2 = player.player_rect.x
-        #jumping = True if player_x_2 > player_x_1 else False
-        jumping = False
-
         # create platforms
         if len(platforms) < 10:
             platforms.append(Platform())
         
         # this may cause a bug later
         for platform in platforms:
-            collidables.append(platform.platform_rect)
+            collidables.append(platform.rect)
         
         #for i in platforms:
             #print(f"num: {len(platforms)}")    # debug
-            #print(i.platform_rect)
+            #print(i.rect)
 
         # handle user input
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
         
-        # player is constantly jumping
-        # check for collisions between 
+        # player is constantly jumping; check for collisions between 
         # player and all other objects
-        ## TODO: fix platform jumping bug with player states
+        ## TODO: fix platform jumping bug: jump through platforms without
+        ## auto jumping
+        player.hitbox.center = player.rect.center
         for rect in collidables:
-            if player.player_rect.colliderect(rect) and not jumping:
+            if player.hitbox.colliderect(rect):
                 player.gravity = player.jump_height
             
-        # gravity does be existing
-        player.gravity += 1
-        player.player_rect.y += player.gravity
-        jumping = False
+        player.gravity += WORLD_GRAVITY
+        player.rect.y += player.gravity
         
         # update screen
         screen.blit(bg, (0, 0))
         screen.blit(ground, ground_rect)
-        screen.blit(player.surf, player.player_rect)
+        screen.blit(player.surf, player.rect)
         for platform in platforms:
-            screen.blit(platform.surf, platform.platform_rect)
-        #screen.blit(platform.surf, platform.platform_rect)     # debug
+            screen.blit(platform.surf, platform.rect)
+        #screen.blit(platform.surf, (100, 700))     # debug
         
         pygame.display.flip()
         
