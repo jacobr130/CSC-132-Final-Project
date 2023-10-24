@@ -19,3 +19,4 @@ HEIGHT = screen.height
 
 # In-game
 FPS = 60
+WORLD_GRAVITY = 0.8
