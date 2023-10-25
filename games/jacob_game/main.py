@@ -161,8 +161,8 @@ def main():
             score += int(abs(player.velocity.y))
             
         # create new platforms
-        ## TODO: MAKE SURE PLATFORMS DON'T INTERSECT
         while len(platforms) < 6:
+            # ensure platforms don't intersect
             while True:
                 x, y = randint(0, WIDTH-250), randint(-20, -18)
                 
