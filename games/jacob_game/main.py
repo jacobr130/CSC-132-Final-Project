@@ -60,12 +60,6 @@ class Player(pygame.sprite.Sprite):
         # if player goes off right of screen spawn at left   
         if self.rect.left >= WIDTH + self.side_length:
             self.pos.x = 0 - self.side_length 
-            
-        """
-        # elif pressed[K_SPACE]:
-            # self.gravity = -20  # physics?
-            # space_down = True
-        """
 
 # Platforms you gotta jump on
 class Platform(pygame.sprite.Sprite):
