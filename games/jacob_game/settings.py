@@ -27,3 +27,7 @@ texture_platform_short = "games\jacob_game\gfx\platform_short.png"
 # In-game
 FPS = 60
 WORLD_GRAVITY = 0.8
+
+# Player settings
+PLAYER_ACCELERATION = 3
+PLAYER_FRICTION = -0.12
