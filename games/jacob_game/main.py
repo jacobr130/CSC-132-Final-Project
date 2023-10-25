@@ -197,7 +197,8 @@ def main():
         # keeps game at 60FPS
         clock.tick(FPS)
     
-    # If game loop is broken
+    # game loop is broken
+    # read or update high score
     disk = shelve.open('games\jacob_game\score.txt')
     high_score = disk["high_score"]
     if score > high_score:
@@ -208,6 +209,7 @@ def main():
         
     font = pygame.font.Font(font_retro, 100)
     
+    # a bunch of stuff that should have been a class method
     text1 = font.render("You Lose!", True, GREEN, BG_COLOR)
     text1_rect = text1.get_rect(center=(WIDTH/2, HEIGHT/2 - 100))
     
