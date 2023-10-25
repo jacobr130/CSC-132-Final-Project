@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from random import randint
+import shelve
 from settings import *
 
 # The player character 
@@ -12,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.side_length = 150   # l and w of rect (square)
         self.dimensions = (self.side_length, self.side_length)
         self.gravity = 0
-        self.jump_height = -25  # gravity offset
+        self.jump_height = -26  # gravity offset
         
         self.surf = pygame.image.load(texture_player_r).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
@@ -53,14 +54,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.pos.y
         
         # if player goes off left of screen spawn at right
-        if self.rect.right <= 0 - self.side_length:
-            print("left side triggering")     
+        if self.rect.right <= 0 - self.side_length:    
             self.pos.x = WIDTH + self.side_length   # updating rect.x by pos so pos is changing
         
         # if player goes off right of screen spawn at left   
         if self.rect.left >= WIDTH + self.side_length:
             self.pos.x = 0 - self.side_length 
-        
             
         """
         # elif pressed[K_SPACE]:
@@ -70,17 +69,17 @@ class Player(pygame.sprite.Sprite):
 
 # Platforms you gotta jump on
 class Platform(pygame.sprite.Sprite):
-    def __init__(self,):
+    def __init__(self, x_pos, y_pos):
         super(Platform, self).__init__()
         
         # PLATFORM SETTINGS
-        self.length = 150
+        self.length = 250
         self.height = 50
         self.dimensions = (self.length, self.height)
         
         self.surf = self.pick_sprite()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
-        self.rect = self.spawn()
+        self.rect = self.surf.get_rect(topleft=(x_pos, y_pos))
     
     def pick_sprite(self):
         """
@@ -94,17 +93,12 @@ class Platform(pygame.sprite.Sprite):
             case 1:
                 return pygame.image.load(texture_platform_short).convert_alpha()
     
-    def spawn(self):
-        return self.surf.get_rect(topleft=(randint(0, WIDTH-self.length), randint(0, 800-self.height)))
-        #return self.surf.get_rect(topleft=(500,700))   # debug 
-    
     def eviscerate(self):   # i couldn't name it break()
         pass
             
 def main():
 
-    #collidables = []
-    collidables2 = pygame.sprite.Group()   # maybe later
+    collidables = pygame.sprite.Group()   # maybe later
     
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -120,16 +114,16 @@ def main():
     ground.surf = pygame.image.load(texture_floor).convert()
     ground.surf = pygame.transform.scale(ground.surf, (WIDTH*2, 800))
     ground.rect = ground.surf.get_rect(topleft=(-800, 800))
-    #collidables.append(ground_rect)
-    collidables2.add(ground)
+    collidables.add(ground)
     
-    # platforms
-    platforms = []
-    #platform = Platform()
-    #collidables.append(platform.rect)
+    # platforms at game start
+    platforms = [Platform(100, 500), Platform(1600, 300), Platform(300, 700)]
     
     # handle fps
     clock = pygame.time.Clock()
+    
+    dead = False
+    score = 0
 
     # Main game loop
     RUNNING = True
@@ -137,14 +131,10 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 RUNNING = False
-
-        # create platforms
-        if len(platforms) < 10:
-            platforms.append(Platform())
         
         # this may cause a bug later
         for platform in platforms:
-            collidables2.add(platform)
+            collidables.add(platform)
             
         # handle user input
         pressed_keys = pygame.key.get_pressed()
@@ -154,7 +144,7 @@ def main():
         # player and all other objects if player is falling
         player.hitbox.center = player.rect.center
         if player.velocity.y > 0:
-            collision = pygame.sprite.spritecollide(player, collidables2, False)
+            collision = pygame.sprite.spritecollide(player, collidables, False)
             if collision and player.hitbox.colliderect(collision[0].rect):
                 if player.hitbox.bottom < collision[0].rect.bottom:
                     player.pos.y = collision[0].rect.top - player.side_length    # because pos is rect topleft
@@ -162,13 +152,51 @@ def main():
 
                     player.velocity.y = player.jump_height
         
+        # scroll screen up (aka move sprites down)
+        if player.rect.top <= HEIGHT / 4:
+            player.pos.y += abs(player.velocity.y)
+            for platform in platforms:
+                platform.rect.y += abs(player.velocity.y)
+                # delete platforms that go offscreen
+                if platform.rect.top > HEIGHT:
+                    platforms.remove(platform)
+                    platform.kill()
+            if ground.rect.top < HEIGHT:
+                ground.rect.y += abs(player.velocity.y)
+            
+            score += int(abs(player.velocity.y))
+            
+        # create new platforms
+        ## TODO: MAKE SURE PLATFORMS DON'T INTERSECT
+        while len(platforms) < 6:
+            while True:
+                x, y = randint(0, WIDTH-250), randint(-20, -18)
+                
+                temp_rect = pygame.Rect(x, y, 250, 50)
+                if not any(plat for plat in platforms if temp_rect.colliderect(plat.rect)):
+                    break
+                
+            p = Platform(x, y)
+            platforms.append(p)
+        
         # update screen
         screen.blit(bg, (0, 0))
-        screen.blit(ground.surf, ground.rect)
+        if ground.rect.top < HEIGHT:
+            screen.blit(ground.surf, ground.rect)
         screen.blit(player.surf, player.rect)
         for platform in platforms:
             screen.blit(platform.surf, platform.rect)
-        #screen.blit(platform.surf, platform.rect)     # debug
+        
+        # score keeper
+        font = pygame.font.Font(font_retro, 32)
+        score_text = font.render(f"Score: {score}", True, GREEN, None)
+        score_text_rect = score_text.get_rect(center=(1700, 50))
+        screen.blit(score_text, score_text_rect)
+        
+        # if the player dies (r.i.p.)
+        if player.rect.bottom >= HEIGHT:
+            dead = True
+            break
         
         pygame.display.flip()
         
@@ -176,6 +204,47 @@ def main():
         clock.tick(FPS)
     
     # If game loop is broken
+    disk = shelve.open('games\jacob_game\score.txt')
+    high_score = disk["high_score"]
+    if score > high_score:
+        high_score = score
+        disk["high_score"] = high_score
+        disk.close()
+    disk.close()
+        
+    font = pygame.font.Font(font_retro, 100)
+    
+    text1 = font.render("You Lose!", True, GREEN, BG_COLOR)
+    text1_rect = text1.get_rect(center=(WIDTH/2, HEIGHT/2 - 100))
+    
+    font = pygame.font.Font(font_retro, 50)
+    text2 = font.render(f"Your Score: {score}", True, GREEN, BG_COLOR)
+    text2_rect = text2.get_rect(center=(text1_rect.center[0], text1_rect.midbottom[1] + 20))
+    
+    text3 = font.render(f"High Score: {high_score}", True, GREEN, BG_COLOR)
+    text3_rect = text3.get_rect(center=(text2_rect.center[0], text2_rect.midbottom[1] + 20))
+    
+    text4 = font.render("Press enter to restart or esc to quit", True, GREEN, BG_COLOR)
+    text4_rect = text4.get_rect(center=(text2_rect.center[0], text2_rect.midbottom[1] + 100)) 
+      
+    while dead:    # probably should have made the game a class too
+        
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                dead = False
+            
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[K_RETURN]:
+            main()
+        elif pressed_keys[K_ESCAPE]:
+            dead = False
+        
+        screen.blit(text1, text1_rect)
+        screen.blit(text2, text2_rect)
+        screen.blit(text3, text3_rect)
+        screen.blit(text4, text4_rect)
+        pygame.display.flip()
+        
     exit()
                 
 if __name__ == "__main__":
