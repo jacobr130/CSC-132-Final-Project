@@ -1,7 +1,5 @@
-# shelve files for keeping high scores
-games/jacob_game/score.txt.bak
-games/jacob_game/score.txt.dat
-games/jacob_game/score.txt.dir
+# Db files
+.txt.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
