@@ -27,7 +27,9 @@ from games.jacob_game.main import *
             else e.g. 'pg'
 
         - Any other local modules used in game must also be 
-            imported here e.g. game settings
+            imported here e.g. game settings, and must be 
+            imported in original file with full path
+            e.g. games.jacob_game.settings
 """
 
 #PINS = [16, 17, 18] # whatever pins the buttons are wired to
