@@ -213,37 +213,37 @@ def main():
 
     obstacle_group = pygame.sprite.Group()
 
-    sky_surface = pygame.image.load("graphics/Sky.png").convert()
-    ground_surface = pygame.image.load("graphics/ground.png").convert()
+    sky_surface = pygame.image.load("games/jackson_game/graphics/Sky.png").convert()
+    ground_surface = pygame.image.load("games/jackson_game/graphics/ground.png").convert()
 
     #score_surface = text_font.render("My Game", False, (64, 64, 64))
     #score_rect = score_surface.get_rect(center = (400, 50))
 
-    snail_frame_1 = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
-    snail_frame_2 = pygame.image.load("graphics/snail/snail2.png").convert_alpha()
+    snail_frame_1 = pygame.image.load("games/jackson_game/graphics/snail/snail1.png").convert_alpha()
+    snail_frame_2 = pygame.image.load("games/jackson_game/graphics/snail/snail2.png").convert_alpha()
     snail_frames = [snail_frame_1, snail_frame_2]
     snail_frame_index = 0
     snail_surface = snail_frames[snail_frame_index]
 
-    fly_frame_1 = pygame.image.load("graphics/Fly/fly1.png").convert_alpha()
-    fly_frame_2 = pygame.image.load("graphics/Fly/fly2.png").convert_alpha()
+    fly_frame_1 = pygame.image.load("games/jackson_game/graphics/Fly/fly1.png").convert_alpha()
+    fly_frame_2 = pygame.image.load("games/jackson_game/graphics/Fly/fly2.png").convert_alpha()
     fly_frames = [fly_frame_1, fly_frame_2]
     fly_frame_index = 0
     fly_surface = fly_frames[fly_frame_index]
 
     obstacle_rect_list = []
 
-    player_walk_1 = pygame.image.load("graphics/Player/player_walk_1.png").convert_alpha()
-    player_walk_2 = pygame.image.load("graphics/Player/player_walk_2.png").convert_alpha()
+    player_walk_1 = pygame.image.load("games/jackson_game/graphics/Player/player_walk_1.png").convert_alpha()
+    player_walk_2 = pygame.image.load("games/jackson_game/graphics/Player/player_walk_2.png").convert_alpha()
     player_walk = [player_walk_1, player_walk_2]
     player_index = 0
-    player_jump = pygame.image.load("graphics/Player/jump.png").convert_alpha()
+    player_jump = pygame.image.load("games/jackson_game/graphics/Player/jump.png").convert_alpha()
 
     player_surface = player_walk[player_index]
     player_rect = player_surface.get_rect(midbottom = (80, 300))
     player_gravity = 0
 
-    player_stand = pygame.image.load("graphics/Player/player_stand.png").convert_alpha()
+    player_stand = pygame.image.load("games/jackson_game/graphics/Player/player_stand.png").convert_alpha()
     player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
     player_stand_rect = player_stand.get_rect(center = (400, 200))
 
