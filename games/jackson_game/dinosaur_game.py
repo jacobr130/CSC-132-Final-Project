@@ -3,7 +3,7 @@ from sys import exit
 from random import randint, choice
 from games.jacob_game.main import GameOver
 
-class Player(pygame.sprite.Sprite):
+class Player2(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         player_walk_1 = pygame.image.load("games/jackson_game/graphics/Player/player_walk_1.png").convert_alpha()
@@ -134,7 +134,7 @@ pygame.font.init()
 text_font = pygame.font.SysFont("quicksand", 50) #pygame.font.Font("games/jackson_game/font/Pixeltype.ttf", 50)
 
 player = pygame.sprite.GroupSingle()
-player.add(Player())
+player.add(Player2())
 
 start_time = 0
 
@@ -212,7 +212,7 @@ def main():
     score = 0
 
     player = pygame.sprite.GroupSingle()
-    player.add(Player())
+    player.add(Player2())
 
     obstacle_group = pygame.sprite.Group()
 
