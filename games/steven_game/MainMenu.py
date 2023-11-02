@@ -6,7 +6,7 @@ class MainMenu:
 
 		self.font = pygame.font.SysFont(None, 34)
 
-		self.menuList = ['Player vs Player', 'Player vs Computer', 'Computer vs Computer']
+		self.menuList = ['Player vs Player']
 		self.items = [] #text objects, a list of lists: [text, bitmap, (width, height), (posx, posy)]
 		self.activeItem = 0
 		self.activeColour = (30, 140, 255)
