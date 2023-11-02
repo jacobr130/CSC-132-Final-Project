@@ -130,7 +130,7 @@ SCREEN_HEIGHT = 400
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Astro Runner")
 
-text_font = pygame.font.Font("games/jackson_game/font/Pixeltype.ttf", 50)
+text_font = pygame.font #pygame.font.Font("games/jackson_game/font/Pixeltype.ttf", 50)
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
