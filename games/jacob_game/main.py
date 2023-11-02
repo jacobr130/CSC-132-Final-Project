@@ -3,7 +3,7 @@ from pygame.math import Vector2
 from random import randint
 import shelve
 import os
-from games.jacob_game.settings import *
+from games.jacob_game.settings import * # console version
 
 # Center window on screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
