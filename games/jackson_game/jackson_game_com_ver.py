@@ -40,7 +40,7 @@ class Obstacle(pygame.sprite.Sprite):
     def __init__(self, type):
         super().__init__()
 
-        if type == "fly":
+        if type == "Fly":
             fly_1 = pygame.image.load("games/jackson_game/graphics/Fly/Fly1.png").convert_alpha()
             fly_2 = pygame.image.load("graphics/Fly/Fly2.png").convert_alpha()
             self.frames = [fly_1, fly_2]
@@ -188,7 +188,7 @@ while True:
                     start_time = int(pygame.time.get_ticks() / 1000)
         if game_active:
             if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice(["fly", "snail", "snail", "snail"])))
+                obstacle_group.add(Obstacle(choice(["Fly", "snail", "snail", "snail"])))
                 #if randint(0, 2):
                     #obstacle_rect_list.append(snail_surface.get_rect(midbottom = (randint(900, 1100), 300)))
             
