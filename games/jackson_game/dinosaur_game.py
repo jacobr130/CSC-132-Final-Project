@@ -190,6 +190,8 @@ fly_animation_timer = pygame.USEREVENT + 3
 pygame.time.set_timer(fly_animation_timer, 200)
 
 def main():
+    from games.jacob_game.main import GameOver
+    
     pygame.init()
 
     SCREEN_WIDTH = 800
