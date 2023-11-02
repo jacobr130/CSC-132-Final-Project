@@ -2,7 +2,15 @@ import pygame
 from pygame.math import Vector2
 from random import randint
 import shelve
-from settings import *
+import os
+from games.jacob_game.settings import *
+
+# Center window on screen
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+class GameOver(Exception):
+    def __init__(self):
+        super().__init__()
 
 # The player character 
 class Player(pygame.sprite.Sprite):
@@ -18,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.image.load(texture_player_r).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, self.dimensions)
         
-        self.rect = self.surf.get_rect(midbottom=(WIDTH//2, 800))
+        self.rect = self.surf.get_rect(midbottom=(WIDTH//2, HEIGHT-280))
         self.hitbox = self.rect.inflate(-35, 0)
         
         self.pos = Vector2(self.rect.topleft[0], self.rect.topleft[1])
@@ -27,11 +35,6 @@ class Player(pygame.sprite.Sprite):
         
     # Handle user input
     def update(self, pressed):
-        """
-            For now, this function takes keyboard input.
-            This will be changed when controller is implemented.
-            Do I have any idea how that will work?
-        """
         self.acceleration = Vector2(0, WORLD_GRAVITY)
         
         if pressed[K_LEFT]:
@@ -77,18 +80,9 @@ class Platform(pygame.sprite.Sprite):
     
     def pick_sprite(self):
         """
-            Currently, there is only one platform.
-            There will be different sizes but this
-            is a proof of concept
+            Yes, this function is pointless
         """
-        size = 1    # will be randint later?
-        
-        match size:
-            case 1:
-                return pygame.image.load(texture_platform_short).convert_alpha()
-    
-    def eviscerate(self):   # i couldn't name it break()
-        pass
+        return pygame.image.load(texture_platform_short).convert_alpha()
             
 def main():
 
@@ -96,6 +90,7 @@ def main():
     
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Computer Jump!")
     
     player = Player()
     
@@ -106,12 +101,12 @@ def main():
     # ground that the game starts on
     ground = pygame.sprite.Sprite()
     ground.surf = pygame.image.load(texture_floor).convert()
-    ground.surf = pygame.transform.scale(ground.surf, (WIDTH*2, 800))
+    ground.surf = pygame.transform.scale(ground.surf, (WIDTH*2, HEIGHT-280))
     ground.rect = ground.surf.get_rect(topleft=(-800, 800))
     collidables.add(ground)
     
     # platforms at game start
-    platforms = [Platform(100, 500), Platform(1600, 300), Platform(300, 700)]
+    platforms = [Platform(100, HEIGHT-500), Platform(WIDTH-300, 300), Platform(300, HEIGHT-300)]
     
     # handle fps
     clock = pygame.time.Clock()
@@ -184,8 +179,13 @@ def main():
         # score keeper
         font = pygame.font.Font(font_retro, 32)
         score_text = font.render(f"Score: {score}", True, GREEN, None)
-        score_text_rect = score_text.get_rect(center=(1700, 50))
+        score_text_rect = score_text.get_rect(topleft=(WIDTH-550, 50))
         screen.blit(score_text, score_text_rect)
+        
+        # show fps (right of score)
+        fps_text = font.render(f"FPS: {int(clock.get_fps() // 1)}", True, GREEN, None)
+        fps_text_rect = fps_text.get_rect(topleft=(WIDTH-200, 50))
+        screen.blit(fps_text, fps_text_rect)
         
         # if the player dies (r.i.p.)
         if player.rect.bottom >= HEIGHT:
@@ -241,7 +241,9 @@ def main():
         screen.blit(text4, text4_rect)
         pygame.display.flip()
         
-    exit()
+    # if the player is dead and quits (keep main menu running)
+    pygame.display.quit()
+    raise GameOver
                 
 if __name__ == "__main__":
     main()
