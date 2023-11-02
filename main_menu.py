@@ -63,6 +63,7 @@ def main_menu():
     pygame.display.init()
     screen = pygame.display.set_mode(ASPECT)
     screen.fill((255, 255, 255))
+    screen.set_caption("JRS Box")
 
     text_font = pygame.font.SysFont('quicksand', 50)
     text = text_font.render("Insert game cartridge", True, (0, 0, 0), None)
