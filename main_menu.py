@@ -61,9 +61,9 @@ steven_game = "games/steven_game/PyTron.py"
 def main_menu():
     pygame.init()
     pygame.display.init()
+    pygame.display.set_caption("JRS Box")
     screen = pygame.display.set_mode(ASPECT)
     screen.fill((255, 255, 255))
-    screen.set_caption("JRS Box")
 
     text_font = pygame.font.SysFont('quicksand', 50)
     text = text_font.render("Insert game cartridge", True, (0, 0, 0), None)
