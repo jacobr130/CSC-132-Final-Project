@@ -200,67 +200,67 @@ def main():
 
     clock = pygame.time.Clock()
 
-    # text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
+    text_font = pygame.font.SysFont("quicksand", 50) #pygame.font.Font("font/Pixeltype.ttf", 50)
 
     game_active = True
 
-    # start_time = 0
+    start_time = 0
 
     score = 0
 
-    # player = pygame.sprite.GroupSingle()
-    # player.add(Player())
+    player = pygame.sprite.GroupSingle()
+    player.add(Player())
 
-    # obstacle_group = pygame.sprite.Group()
+    obstacle_group = pygame.sprite.Group()
 
-    # sky_surface = pygame.image.load("graphics/Sky.png").convert()
-    # ground_surface = pygame.image.load("graphics/ground.png").convert()
+    sky_surface = pygame.image.load("graphics/Sky.png").convert()
+    ground_surface = pygame.image.load("graphics/ground.png").convert()
 
-    # #score_surface = text_font.render("My Game", False, (64, 64, 64))
-    # #score_rect = score_surface.get_rect(center = (400, 50))
+    #score_surface = text_font.render("My Game", False, (64, 64, 64))
+    #score_rect = score_surface.get_rect(center = (400, 50))
 
-    # snail_frame_1 = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
-    # snail_frame_2 = pygame.image.load("graphics/snail/snail2.png").convert_alpha()
-    # snail_frames = [snail_frame_1, snail_frame_2]
-    # snail_frame_index = 0
-    # snail_surface = snail_frames[snail_frame_index]
+    snail_frame_1 = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
+    snail_frame_2 = pygame.image.load("graphics/snail/snail2.png").convert_alpha()
+    snail_frames = [snail_frame_1, snail_frame_2]
+    snail_frame_index = 0
+    snail_surface = snail_frames[snail_frame_index]
 
-    # fly_frame_1 = pygame.image.load("graphics/Fly/fly1.png").convert_alpha()
-    # fly_frame_2 = pygame.image.load("graphics/Fly/fly2.png").convert_alpha()
-    # fly_frames = [fly_frame_1, fly_frame_2]
-    # fly_frame_index = 0
-    # fly_surface = fly_frames[fly_frame_index]
+    fly_frame_1 = pygame.image.load("graphics/Fly/fly1.png").convert_alpha()
+    fly_frame_2 = pygame.image.load("graphics/Fly/fly2.png").convert_alpha()
+    fly_frames = [fly_frame_1, fly_frame_2]
+    fly_frame_index = 0
+    fly_surface = fly_frames[fly_frame_index]
 
-    # obstacle_rect_list = []
+    obstacle_rect_list = []
 
-    # player_walk_1 = pygame.image.load("graphics/Player/player_walk_1.png").convert_alpha()
-    # player_walk_2 = pygame.image.load("graphics/Player/player_walk_2.png").convert_alpha()
-    # player_walk = [player_walk_1, player_walk_2]
-    # player_index = 0
-    # player_jump = pygame.image.load("graphics/Player/jump.png").convert_alpha()
+    player_walk_1 = pygame.image.load("graphics/Player/player_walk_1.png").convert_alpha()
+    player_walk_2 = pygame.image.load("graphics/Player/player_walk_2.png").convert_alpha()
+    player_walk = [player_walk_1, player_walk_2]
+    player_index = 0
+    player_jump = pygame.image.load("graphics/Player/jump.png").convert_alpha()
 
-    # player_surface = player_walk[player_index]
-    # player_rect = player_surface.get_rect(midbottom = (80, 300))
-    # player_gravity = 0
+    player_surface = player_walk[player_index]
+    player_rect = player_surface.get_rect(midbottom = (80, 300))
+    player_gravity = 0
 
-    # player_stand = pygame.image.load("graphics/Player/player_stand.png").convert_alpha()
-    # player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
-    # player_stand_rect = player_stand.get_rect(center = (400, 200))
+    player_stand = pygame.image.load("graphics/Player/player_stand.png").convert_alpha()
+    player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
+    player_stand_rect = player_stand.get_rect(center = (400, 200))
 
-    # game_name = text_font.render("Astro Runner", False, (111, 196, 169))
-    # game_name_rect = game_name.get_rect(center = (400, 80))
+    game_name = text_font.render("Astro Runner", False, (111, 196, 169))
+    game_name_rect = game_name.get_rect(center = (400, 80))
 
-    # game_message = text_font.render("Press space to start", False, (111, 196, 169))
-    # game_message_rect = game_message.get_rect(center = (400, 320))
+    game_message = text_font.render("Press space to start", False, (111, 196, 169))
+    game_message_rect = game_message.get_rect(center = (400, 320))
 
-    # obstacle_timer = pygame.USEREVENT + 1
-    # pygame.time.set_timer(obstacle_timer, randint(1000, 1150))
+    obstacle_timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(obstacle_timer, randint(1000, 1150))
 
-    # snail_animation_timer = pygame.USEREVENT + 2
-    # pygame.time.set_timer(snail_animation_timer, 500)
+    snail_animation_timer = pygame.USEREVENT + 2
+    pygame.time.set_timer(snail_animation_timer, 500)
 
-    # fly_animation_timer = pygame.USEREVENT + 3
-    # pygame.time.set_timer(fly_animation_timer, 200)
+    fly_animation_timer = pygame.USEREVENT + 3
+    pygame.time.set_timer(fly_animation_timer, 200)
 
     running = True
     while running:
