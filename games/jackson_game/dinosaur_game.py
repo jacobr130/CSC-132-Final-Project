@@ -284,7 +284,7 @@ def main():
 
             if game_active:
                 if event.type == obstacle_timer:
-                    obstacle_group.add(Obstacle(choice(["fly", "snail", "snail", "snail"])))
+                    obstacle_group.add(Obstacle(choice(["Fly", "snail", "snail", "snail"])))
                     #if randint(0, 2):
                         #obstacle_rect_list.append(snail_surface.get_rect(midbottom = (randint(900, 1100), 300)))
                 
