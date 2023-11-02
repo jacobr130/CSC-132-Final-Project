@@ -8,16 +8,8 @@ from pygame.locals import (
 )
 
 # Game window
-from screeninfo import get_monitors
-
-# this makes the game fullscreen no matter what
-# monitor is being used
-for monitor in get_monitors():
-    if monitor.is_primary == True:
-        screen = monitor
-
-WIDTH = screen.width
-HEIGHT = screen.height
+WIDTH = 1400
+HEIGHT = 900
 
 # Assets
 texture_player_r = "games\jacob_game\gfx\player_r.png"
