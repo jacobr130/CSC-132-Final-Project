@@ -90,6 +90,7 @@ def main():
     
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Computer Jump!")
     
     player = Player()
     
@@ -178,8 +179,13 @@ def main():
         # score keeper
         font = pygame.font.Font(font_retro, 32)
         score_text = font.render(f"Score: {score}", True, GREEN, None)
-        score_text_rect = score_text.get_rect(center=(WIDTH-380, 50))
+        score_text_rect = score_text.get_rect(topleft=(WIDTH-550, 50))
         screen.blit(score_text, score_text_rect)
+        
+        # show fps (right of score)
+        fps_text = font.render(f"FPS: {int(clock.get_fps() // 1)}", True, GREEN, None)
+        fps_text_rect = fps_text.get_rect(topleft=(WIDTH-200, 50))
+        screen.blit(fps_text, fps_text_rect)
         
         # if the player dies (r.i.p.)
         if player.rect.bottom >= HEIGHT:
