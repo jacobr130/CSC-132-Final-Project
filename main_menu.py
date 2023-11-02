@@ -64,18 +64,16 @@ def main_menu():
     screen = pygame.display.set_mode(ASPECT)
     screen.fill((255, 255, 255))
 
+    text_font = pygame.font.SysFont('quicksand', 50)
+    text = text_font.render("Insert game cartridge", True, (0, 0, 0), None)
+    text_rect = text.get_rect(center=(ASPECT[0]/2, ASPECT[1]/2))
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        """
-            This will be implemented with GPIO instead of pygame 
-            later tonight
-        """
-        #pressed = pygame.key.get_pressed()
-        #if pressed[pygame.K_a]:
         if rp.input(button1) == rp.HIGH:
             print("working")
             game1_running = True
@@ -107,6 +105,7 @@ def main_menu():
                     game3_running = False
                     main_menu()
         """
+        screen.blit(text, text_rect)
 
         pygame.display.flip()
     
