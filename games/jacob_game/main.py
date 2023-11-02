@@ -199,13 +199,14 @@ def main():
     
     # game loop is broken
     # read or update high score
-    disk = shelve.open('games\jacob_game\score.txt')
-    high_score = disk["high_score"]
+    high_score = 20000
+    #disk = shelve.open('games\jacob_game\score.txt')
+    #high_score = disk["high_score"]
     if score > high_score:
         high_score = score
-        disk["high_score"] = high_score
-        disk.close()
-    disk.close()
+        #disk["high_score"] = high_score
+        #disk.close()
+    #disk.close()
         
     font = pygame.font.Font(font_retro, 100)
     

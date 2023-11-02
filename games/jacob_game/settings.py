@@ -12,12 +12,12 @@ WIDTH = 1400
 HEIGHT = 900
 
 # Assets
-texture_player_r = "games\jacob_game\gfx\player_r.png"
-texture_player_l = "games\jacob_game\gfx\player_l.png"
-texture_floor = "games\jacob_game\gfx\ground.png"
-texture_bg = "games\jacob_game\gfx\sky.png"
-texture_platform_short = "games\jacob_game\gfx\platform_short.png"
-font_retro = "games\jacob_game\gfx\computer.ttf"
+texture_player_r = "games/jacob_game/gfx/player_r.png"
+texture_player_l = "games/jacob_game/gfx/player_l.png"
+texture_floor = "games/jacob_game/gfx/ground.png"
+texture_bg = "games/jacob_game/gfx/sky.png"
+texture_platform_short = "games/jacob_game/gfx/platform_short.png"
+font_retro = "games/jacob_game/gfx/computer.ttf"
 
 # In-game
 FPS = 60
