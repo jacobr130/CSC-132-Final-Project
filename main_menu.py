@@ -1,4 +1,4 @@
-# Menu screen and game runner
+# Menu screen and game runner by Jacob Rice
 #import RPi.GPIO as rp
 #from threading import Thread    # depends on performance
 from screeninfo import get_monitors
@@ -30,6 +30,22 @@ from games.jacob_game.main import *
             imported here e.g. game settings, and must be 
             imported in original file with full path
             e.g. games.jacob_game.settings
+    
+    THERE IS ONE PROBLEM (if using a local import):
+    
+        The games no longer run on their own and must be run 
+        through main_menu.py
+        
+        This is because in order for exec(file.read()) to work,
+        local imports have to use their full relative path,
+        e.g. games.jacob_game.settings
+        
+        However, when main.py is run on its own, 
+        (python games/jacob_game/main.py), the shell
+        has no idea what games is when encountering
+        games.jacob_game.settings
+        
+        This will most likely just have to be a compromise.
 """
 
 #PINS = [16, 17, 18] # whatever pins the buttons are wired to
